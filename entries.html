@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Saved Mood Entries</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #ffffff, #3fbfbf);
+      padding: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      text-align: center;
+      color: #0f6666;
+    }
+
+    .entry {
+      background-color: white;
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+    }
+
+    .entry h3 {
+      margin: 0;
+      color: #0f6666;
+    }
+
+    .entry p {
+      margin: 5px 0;
+    }
+
+    .back-button {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <button class="back-button" onclick="window.location.href='journal.html'">← Back to Journal</button>
+
+  <h1>Your Mood Entries</h1>
+  <div id="entryList"></div>
+
+  <script>
+    const entryList = document.getElementById('entryList');
+    const entries = JSON.parse(localStorage.getItem("entries")) || [];
+
+    if (entries.length === 0) {
+      entryList.innerHTML = "<p>No entries yet.</p>";
+    } else {
+      entries.forEach((entry, index) => {
+        const entryDiv = document.createElement("div");
+        entryDiv.className = "entry";
+
+        entryDiv.innerHTML = `
+          <h3>Entry ${index + 1} - ${entry.date}</h3>
+          <p><strong>Mood(s):</strong> ${entry.mood.join(", ")}</p>
+          <p><strong>Notes:</strong></p>
+          <p>${entry.notes}</p>
+        `;
+
+        entryList.appendChild(entryDiv);
+      });
+    }
+  </script>
+</body>
+</html>
