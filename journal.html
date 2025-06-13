@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" type="text/css" href="journal.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mood Journal Entries</title>
+  <style>
+    body {
+      font-family: Didot, bold;
+      background: linear-gradient(to bottom, #ffffff, #3fbfbf);
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    label {
+      font-weight: light;
+      display: block;
+      margin-top: 15px;
+    }
+    textarea {
+      width: 100%;
+      max-width: 100%;
+    }
+    .mood-checkboxes label {
+      font-weight: normal;
+      margin-right: 10px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #11bab7;
+      color: white;
+      border: none;
+      cursor: none;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0e9a98;
+    }
+    h1{
+      text-align: center;
+    }
+  </style>
+  
+  
+</head>
+<body>
+  
+  <h1>Mood Journal Entry</h1>
+
+  <form id="moodForm">
+    <label for="dateInput">Date (MM-DD-YYYY):</label>
+    <input
+      type="text"
+      id="dateInput"
+      name="dateInput"
+      placeholder="03-24-2004" 
+      required
+      pattern="\d{2}-\d{2}-\d{4}"
+      title="Please enter date in MM-DD-YYYY format"
+    />
+
+    <label>Select your mood(s):</label>
+    <div class="mood-checkboxes">
+      <label><input type="checkbox" name="mood" value="calm" /> Calm</label>
+      <label><input type="checkbox" name="mood" value="nervous" /> Nervous</label>
+      <label><input type="checkbox" name="mood" value="sad" /> Sad</label>
+      <label><input type="checkbox" name="mood" value="angry" /> Angry</label>
+      <label><input type="checkbox" name="mood" value="mad" /> Mad</label>
+    </div>
+
+    <label for="notesInput">Notes (max 250 words):</label>
+    <textarea
+      id="notesInput"
+      name="notesInput"
+      rows="6"
+      maxlength="1500"
+      placeholder="A man is but a product of his thoughts..."
+      required
+    ></textarea>
+
+    <button type="submit">Submit Mood Entry</button>
+  </form>
+
+  <script>
+    const form = document.getElementById("moodForm");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const date = form.dateInput.value.trim();
+      const moods = [...form.querySelectorAll('input[name="mood"]:checked')].map(cb => cb.value);
+      const notes = form.notesInput.value.trim();
+
+      if (!date || moods.length === 0 || !notes) {
+        alert("Please fill in all fields and select at least one mood.");
+        return;
+      }
+
+      const wordCount = notes.split(/\s+/).filter(word => word.length > 0).length;
+      if (wordCount > 250) {
+        alert("Notes must be 250 words or fewer.");
+        return;
+      }
+
+      
+      let entries = JSON.parse(localStorage.getItem("entries")) || [];
+      entries.push({ date, moods, notes });
+      localStorage.setItem("entries", JSON.stringify(entries));
+
+      alert("Entry saved!");
+
+      form.reset();
+    });
+  </script>
+  
+  <a href="index.html">
+  <button type="button">← Back to Main Page</button>
+    </a>
+  <a href ="entries.html">
+  <button type = "button"> view entries </button>
+  </a>
+
+</body>
+</html>
